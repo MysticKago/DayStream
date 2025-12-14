@@ -1,0 +1,5 @@
+{
+  "name": "DayStream AI Scheduler",
+  "description": "A smart daily planner that uses Gemini AI to organize your day, manage tasks, and optimize your schedule seamlessly.",
+  "requestFramePermissions": []
+}
