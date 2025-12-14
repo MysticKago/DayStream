@@ -1,5 +1,6 @@
 export interface Task {
   id: string;
+  seriesId?: string; // Identifies tasks created as part of a recurring series
   title: string;
   description?: string;
   startTime: string; // HH:MM 24h format

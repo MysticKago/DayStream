@@ -90,16 +90,32 @@ const App: React.FC = () => {
     localStorage.setItem('daystream-tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  const handleAddTask = (taskData: Omit<Task, 'id' | 'isCompleted'> & { id?: string }) => {
-    if (taskData.id) {
-      setTasks(prev => prev.map(t => t.id === taskData.id ? { ...t, ...taskData } : t));
-    } else {
-      const newTask: Task = {
-        ...taskData,
+  const handleAddTask = (taskData: (Omit<Task, 'id' | 'isCompleted'> & { id?: string }) | (Omit<Task, 'id' | 'isCompleted'>)[]) => {
+    
+    if (Array.isArray(taskData)) {
+      // Handle Group/Series Creation
+      const seriesId = generateId();
+      const newTasks: Task[] = taskData.map(t => ({
+        ...t,
         id: generateId(),
         isCompleted: false,
-      };
-      setTasks(prev => [...prev, newTask]);
+        seriesId: seriesId
+      }));
+      setTasks(prev => [...prev, ...newTasks]);
+    } else {
+      // Handle Single Task (Create or Edit)
+      if (taskData.id) {
+        // Edit mode
+        setTasks(prev => prev.map(t => t.id === taskData.id ? { ...t, ...taskData } : t));
+      } else {
+        // Create mode
+        const newTask: Task = {
+          ...taskData,
+          id: generateId(),
+          isCompleted: false,
+        };
+        setTasks(prev => [...prev, newTask]);
+      }
     }
     setEditingTask(null);
   };
